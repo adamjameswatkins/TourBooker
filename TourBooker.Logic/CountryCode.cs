@@ -22,6 +22,11 @@ namespace Pluralsight.AdvCShColls.TourBooker.Logic
             return false;
         }
 
+        public override int GetHashCode()
+        {
+            return StringComparer.OrdinalIgnoreCase.GetHashCode(this.Value);
+        }
+
         public static bool operator ==(CountryCode lhs, CountryCode rhs)
         {
             if (lhs != null)
