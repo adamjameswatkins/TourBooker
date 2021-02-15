@@ -4,7 +4,7 @@ namespace Pluralsight.AdvCShColls.TourBooker.Logic
 {
     public class CountryCode
     {
-        public string Value { get; set; }
+        public string Value { get; }
 
         public CountryCode(string value)
         {
@@ -20,11 +20,6 @@ namespace Pluralsight.AdvCShColls.TourBooker.Logic
                 return StringComparer.OrdinalIgnoreCase.Equals(this.Value, other.Value);
             }
             return false;
-        }
-
-        public override int GetHashCode()
-        {
-            return StringComparer.OrdinalIgnoreCase.GetHashCode(this.Value);
         }
 
         public static bool operator ==(CountryCode lhs, CountryCode rhs)
@@ -43,5 +38,8 @@ namespace Pluralsight.AdvCShColls.TourBooker.Logic
         {
             return !(lhs == rhs);
         }
+
+		public override int GetHashCode() => 
+			StringComparer.OrdinalIgnoreCase.GetHashCode(this.Value);
     }
 }
