@@ -216,9 +216,9 @@ namespace Pluralsight.AdvCShColls.TourBooker.UI
 		}
 
 
-		private List<Country> GetCountriesInSelection()
+		private HashSet<Country> GetCountriesInSelection()
 		{
-			var countries = new List<Country>();
+			var countries = new HashSet<Country>();
 
 			List<Tour> selectedTours = GetRequestedTours();
 			foreach (Tour tour in selectedTours)
@@ -226,7 +226,7 @@ namespace Pluralsight.AdvCShColls.TourBooker.UI
 				foreach (Country country in tour.Itinerary)
 					countries.Add(country);
 			}
-			return countries.Distinct().ToList();
+			return countries;
 		}
     }
 }
