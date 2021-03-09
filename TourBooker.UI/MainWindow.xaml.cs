@@ -226,7 +226,7 @@ namespace Pluralsight.AdvCShColls.TourBooker.UI
 				foreach (Country country in tour.Itinerary)
 					countries.Add(country);
 			}
-			return countries;
+			return countries.Distinct().ToList();
 		}
     }
 }
