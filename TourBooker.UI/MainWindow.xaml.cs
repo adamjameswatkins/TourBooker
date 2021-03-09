@@ -216,9 +216,9 @@ namespace Pluralsight.AdvCShColls.TourBooker.UI
 		}
 
 
-		private HashSet<Country> GetCountriesInSelection()
+		private SortedSet<Country> GetCountriesInSelection()
 		{
-			var countries = new HashSet<Country>();
+			var countries = new SortedSet<Country>(CountryNameComparer.Instance);
 
 			List<Tour> selectedTours = GetRequestedTours();
 			foreach (Tour tour in selectedTours)
