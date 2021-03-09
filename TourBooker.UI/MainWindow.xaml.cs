@@ -218,15 +218,27 @@ namespace Pluralsight.AdvCShColls.TourBooker.UI
 
 		private SortedSet<Country> GetCountriesInSelection()
 		{
-			var countries = new SortedSet<Country>(CountryNameComparer.Instance);
-
 			List<Tour> selectedTours = GetRequestedTours();
+			if(selectedTours.Count == 0)
+            {
+				return new SortedSet<Country>(CountryNameComparer.Instance);
+            }
+
+			var allSets = new List<SortedSet<Country>>();
 			foreach (Tour tour in selectedTours)
 			{
-				foreach (Country country in tour.Itinerary)
-					countries.Add(country);
+				SortedSet<Country> tourCountries = new SortedSet<Country>(
+					tour.Itinerary, CountryNameComparer.Instance);
+				allSets.Add(tourCountries);
 			}
-			return countries;
+
+			SortedSet<Country> result = allSets[0];
+            for (int i = 1; i < allSets.Count; i++)
+            {
+				result.UnionWith(allSets[i]);
+            }
+
+			return result;
 		}
     }
 }
