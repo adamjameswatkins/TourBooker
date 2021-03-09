@@ -6,6 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace Pluralsight.AdvCShColls.TourBooker.UI
 {
@@ -33,7 +40,14 @@ namespace Pluralsight.AdvCShColls.TourBooker.UI
 			this.lbxToursToBook.Items.Refresh();
 			this.lbxConfirmedBookedTours.Items.Refresh();
 			this.lbxRequests.Items.Refresh();
-			//			this.lbxRequests.ItemsSource = AllData.BookingRequests.ToList();
+			// Next statement is a workaround because WPF seems to have problems
+			// displaying the contents of a concurrent list.
+			// Unsure of the cause - most likely an issue with WPF.
+			// Realistically, in normal code you wouldn't normally be hooking a WPF listbox
+			// up to a concurrent queue anyway because of issues of concurrency and
+			// mixing backend data and UI - it's only done in this demo
+			// in order to provide an easy way to see what's in the collections.
+			this.lbxRequests.ItemsSource = AllData.BookingRequests.ToList();
 			this.lbxRequests.Items.Refresh();
 			this.tbxNextBookingRequest.Text = GetLatestBookingRequestText();
 		}
@@ -138,6 +152,7 @@ namespace Pluralsight.AdvCShColls.TourBooker.UI
 
 			}
 			this.tbxToursItinerary.Text = sb.ToString();
+			this.lbxCountriesInSelection.ItemsSource = GetCountriesInSelection();
 		}
 		private async void btnBookTour_Click(object sender, RoutedEventArgs e)
 		{
@@ -198,6 +213,20 @@ namespace Pluralsight.AdvCShColls.TourBooker.UI
 		{
 			Customer customer = this.lbxCustomer.SelectedItem as Customer;
 			this.gbxBookedTours.DataContext = customer;
+		}
+
+
+		private List<Country> GetCountriesInSelection()
+		{
+			var countries = new List<Country>();
+
+			List<Tour> selectedTours = GetRequestedTours();
+			foreach (Tour tour in selectedTours)
+			{
+				foreach (Country country in tour.Itinerary)
+					countries.Add(country);
+			}
+			return countries;
 		}
     }
 }
