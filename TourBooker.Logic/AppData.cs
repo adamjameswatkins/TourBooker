@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -7,8 +8,8 @@ namespace Pluralsight.AdvCShColls.TourBooker.Logic
 {
     public class AppData
     {
-        public ReadOnlyCollection<Country> AllCountries { get; private set; }
-		public ReadOnlyDictionary<CountryCode, Country> AllCountriesByKey { get; private set; }
+        public ImmutableArray<Country> AllCountries { get; private set; }
+		public ImmutableDictionary<CountryCode, Country> AllCountriesByKey { get; private set; }
 		public List<Customer> Customers { get; private set; }
 			 = new List<Customer>() { new Customer("Simon"), new Customer("Kim") };
 		public ConcurrentQueue<(Customer TheCustomer, Tour TheTour)> BookingRequests { get; }
@@ -22,9 +23,8 @@ namespace Pluralsight.AdvCShColls.TourBooker.Logic
         {
             CsvReader reader = new CsvReader(csvFilePath);
 			var countries = reader.ReadAllCountries().OrderBy(x => x.Name).ToList();
-			this.AllCountries = countries.AsReadOnly();
-			var dict = AllCountries.ToDictionary(x => x.Code);
-			this.AllCountriesByKey = new ReadOnlyDictionary<CountryCode, Country>(dict);
+			this.AllCountries = countries.ToImmutableArray();
+			this.AllCountriesByKey = AllCountries.ToImmutableDictionary(x => x.Code);
 			this.SetupHardCodedTours();
         }
 		void SetupHardCodedTours()
