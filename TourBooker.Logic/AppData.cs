@@ -8,8 +8,8 @@ namespace Pluralsight.AdvCShColls.TourBooker.Logic
     public class AppData
     {
         public IReadOnlyList<Country> AllCountries { get; private set; }
-		public ImmutableDictionary<CountryCode, Country> AllCountriesByKey { get; private set; }
-		public List<Customer> Customers { get; private set; }
+		public IReadOnlyDictionary<CountryCode, Country> AllCountriesByKey { get; private set; }
+		public IEnumerable<Customer> Customers { get; private set; }
 			 = new List<Customer>() { new Customer("Simon"), new Customer("Kim") };
 		public ConcurrentQueue<(Customer TheCustomer, Tour TheTour)> BookingRequests { get; }
 			= new ConcurrentQueue<(Customer, Tour)>();
